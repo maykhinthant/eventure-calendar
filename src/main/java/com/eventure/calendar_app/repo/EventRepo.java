@@ -1,13 +1,11 @@
-// package com.eventure.calendar_app.repo;
+package com.eventure.calendar_app.repo;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-// import com.eventure.calendar_app.model.Event;
-// import java.util.List;
+import com.eventure.calendar_app.model.Events;
 
+@Repository
+public interface EventRepo extends JpaRepository<Events, Integer>{
 
-// @Repository
-// public interface EventRepo extends JpaRepository<Event, Integer>{
-//     List<Event> findByCreatedBy(String createdBy);
-// }
+}
