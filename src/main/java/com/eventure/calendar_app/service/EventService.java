@@ -1,7 +1,5 @@
 package com.eventure.calendar_app.service;
 
-// import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.eventure.calendar_app.model.Events;
@@ -22,7 +20,7 @@ public class EventService {
     }
 
     // ---------- CREATE NEW EVENT ----------
-    // Find the user object using the username
+    // Find the users object using the username
     // Set the createdBy for the event and save the event
     public void createEvent(Events event, String username) {
         Users user = userRepo.findByUsername(username);

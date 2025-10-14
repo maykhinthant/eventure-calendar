@@ -30,7 +30,7 @@ public class Events {
     private String calendarId;
     private Boolean completed;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // Many event -> one user
+    @ManyToOne(fetch = FetchType.LAZY)  // Many events -> one user
     @JoinColumn(name = "users_id", nullable = false)
     @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})
     private Users createdBy;
