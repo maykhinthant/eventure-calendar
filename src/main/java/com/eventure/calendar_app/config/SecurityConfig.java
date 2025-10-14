@@ -48,7 +48,7 @@ public class SecurityConfig {
 		return http
 					.csrf(customizer -> customizer.disable())
 					.authorizeHttpRequests(request -> request
-							.requestMatchers("/api/register", "/api/login")	// Don't authorize the register and login page
+							.requestMatchers("/api/users/register", "/api/users/login")	// Don't authorize the register and login page
 							.permitAll()							// But permit authorization for any other requests
 							.anyRequest().authenticated())
 					.httpBasic(Customizer.withDefaults())

@@ -17,12 +17,12 @@ public class UserController {
 	private UserService service;
 	
 	// Register a new user in the database: id, username and password
-	@PostMapping("/register")
+	@PostMapping("/users/register")
 	public Users register (@RequestBody Users user) {
 		return service.register(user);
 	}
 
-	@PostMapping("/login")
+	@PostMapping("/users/login")
 	public String login(@RequestBody Users user) {
 		System.out.println(user);
 		return service.verify(user);
