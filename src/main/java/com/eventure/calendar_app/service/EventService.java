@@ -36,7 +36,7 @@ public class EventService {
         eventRepo.save(event);
     }
 
-    // Fetch all the events for the logged in user
+    // --------- FETCH ALL THE EVENTS FOR THE LOGGED IN USER ----------
     public List<Events> getEvents(String username) {
         if(username == null) {
             return eventRepo.findAll();
@@ -45,7 +45,7 @@ public class EventService {
         return eventRepo.findByCreatedBy_Username(username);
     }
 
-    // Update an existing event
+    // --------- UPDATE AN EXISTING EVENT ----------
     public void updateEvent(Integer id, Events updated, String username) throws AccessDeniedException {
         Events existing = eventRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("event not found: "  +id));
 
@@ -64,5 +64,18 @@ public class EventService {
         existing.setCompleted(updated.getCompleted());
 
         eventRepo.save(existing);
+    }
+
+    // --------- DELETE THE EVENT BY THE ID ----------
+    public void deleteEvent(Integer id, String username) throws AccessDeniedException {
+        Events existing = eventRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("event not found: "  +id));
+        
+        Users owner = existing.getCreatedBy();
+
+        if(owner == null || username == null || !username.equals(owner.getUsername())) {
+            throw new AccessDeniedException("Not allowed to update this event");
+        }
+
+        eventRepo.deleteById(id);
     }
 }

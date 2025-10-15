@@ -1,7 +1,6 @@
 package com.eventure.calendar_app.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eventure.calendar_app.model.Events;
@@ -14,6 +13,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -48,5 +48,12 @@ public class EventController {
     public void updateEvent(@PathVariable Integer id, @RequestBody Events event, Principal principal) throws AccessDeniedException {
         String username = principal != null ? principal.getName() : null;
         service.updateEvent(id, event, username);
+    }
+
+    // Delete the event by the id
+    @DeleteMapping("/events/{id}")
+    public void deleteEvent(@PathVariable Integer id, Principal principal) throws AccessDeniedException {
+        String username = principal != null ? principal.getName() : null;
+        service.deleteEvent(id, username);
     }
 }
