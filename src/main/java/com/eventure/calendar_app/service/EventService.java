@@ -1,5 +1,7 @@
 package com.eventure.calendar_app.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.eventure.calendar_app.model.Events;
@@ -31,5 +33,13 @@ public class EventService {
 
         event.setCreatedBy(user);
         eventRepo.save(event);
+    }
+
+    public List<Events> getEvents(String username) {
+        if(username == null) {
+            return eventRepo.findAll();
+        }
+
+        return eventRepo.findByCreatedBy_Username(username);
     }
 }
