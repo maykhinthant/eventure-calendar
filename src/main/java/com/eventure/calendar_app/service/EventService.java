@@ -60,7 +60,7 @@ public class EventService {
         existing.setTitle(updated.getTitle());
         existing.setStartTime(updated.getStartTime());
         existing.setEndTime(updated.getEndTime());
-        existing.setCalendarId(updated.getCalendarId());
+        // existing.setCalendarId(updated.getCalendarId());
         existing.setCompleted(updated.getCompleted());
 
         eventRepo.save(existing);
