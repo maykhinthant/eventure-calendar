@@ -1,5 +1,7 @@
 package com.eventure.calendar_app.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.eventure.calendar_app.model.Calendars;
@@ -28,6 +30,15 @@ public class CalendarService {
 
         calendar.setOwner(user);
         calRepo.save(calendar);
+    }
+
+    // Fetch all the calendars for the logged in user
+    public List<Calendars> getAllCalendars(String username) {
+        if(username == null) {
+            return calRepo.findAll();
+        }
+
+        return calRepo.findByOwner_Username(username);
     }
     
 }
