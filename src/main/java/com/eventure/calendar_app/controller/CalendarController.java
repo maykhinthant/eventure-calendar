@@ -4,6 +4,7 @@ import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,12 @@ public class CalendarController {
     public void updateCalendar(@PathVariable Integer id, @RequestBody Calendars updated, Principal principal) throws AccessDeniedException {
         String username = principal != null ? principal.getName() : null;
         service.updateCalendar(id, updated, username);
+    }
+
+    // Delete a calendar
+    @DeleteMapping("/calendars/{id}")
+    public void deleteCalendar(@PathVariable Integer id, Principal principal) throws AccessDeniedException {
+        String username = principal != null ? principal.getName() : null;
+        service.deleteCalendar(id, username);
     }
 }

@@ -60,4 +60,18 @@ public class CalendarService {
 
         calRepo.save(existing);
     }
+
+    // Delete a calendar
+    public void deleteCalendar(Integer id, String username) throws AccessDeniedException {
+        Calendars existing = calRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("calendar not found: "  + id));
+
+        // Check ownership
+        Users owner = existing.getOwner();
+
+        if(owner == null || username == null || !username.equals(owner.getUsername())) {
+            throw new AccessDeniedException("Not allowed to delete this calendar");
+        }
+
+        calRepo.deleteById(id);
+    }
 }
