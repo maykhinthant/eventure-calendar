@@ -1,5 +1,6 @@
 package com.eventure.calendar_app.service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -40,5 +41,23 @@ public class CalendarService {
 
         return calRepo.findByOwner_Username(username);
     }
-    
+
+    // Update an existing calendar
+    public void updateCalendar(Integer id, Calendars updated, String username) throws AccessDeniedException {
+        Calendars existing = calRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("calendar not found: "  + id));
+
+        // Check ownership
+        Users owner = existing.getOwner();
+
+        if(owner == null || username == null || !username.equals(owner.getUsername())) {
+            throw new AccessDeniedException("Not allowed to update this event");
+        }
+
+        // Copy fileds that are allowed to change
+        existing.setId(updated.getId());
+        existing.setName(updated.getName());
+        existing.setColor(updated.getColor());
+
+        calRepo.save(existing);
+    }
 }
