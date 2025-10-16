@@ -73,7 +73,7 @@ public class EventService {
         Users owner = existing.getCreatedBy();
 
         if(owner == null || username == null || !username.equals(owner.getUsername())) {
-            throw new AccessDeniedException("Not allowed to update this event");
+            throw new AccessDeniedException("Not allowed to delete this event");
         }
 
         eventRepo.deleteById(id);

@@ -50,7 +50,7 @@ public class CalendarService {
         Users owner = existing.getOwner();
 
         if(owner == null || username == null || !username.equals(owner.getUsername())) {
-            throw new AccessDeniedException("Not allowed to update this event");
+            throw new AccessDeniedException("Not allowed to update this calendar");
         }
 
         // Copy fileds that are allowed to change
