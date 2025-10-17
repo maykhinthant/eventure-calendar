@@ -54,7 +54,7 @@ public class EventService {
         eventRepo.save(event);
     }
 
-    // --------- FETCH ALL THE EVENTS FOR THE LOGGED IN USER ----------
+    // Fetch all the events for the logged in user
     public List<Events> getEvents(String username) {
         if(username == null) {
             return eventRepo.findAll();
@@ -94,7 +94,7 @@ public class EventService {
         eventRepo.save(existing);
     }
 
-    // --------- DELETE THE EVENT BY THE ID ----------
+    // Delete the event by the id
     public void deleteEvent(Integer id, String username) throws AccessDeniedException {
         Events existing = eventRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("event not found: "  +id));
         
