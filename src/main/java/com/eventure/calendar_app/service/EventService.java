@@ -50,7 +50,7 @@ public class EventService {
                 event.setCalendar(null);
             }
         }
-        
+
         eventRepo.save(event);
     }
 
@@ -63,11 +63,10 @@ public class EventService {
         return eventRepo.findByCreatedBy_Username(username);
     }
 
-    // --------- UPDATE AN EXISTING EVENT ----------
+    // Update an existing event
     public void updateEvent(Integer id, Events updated, String username) throws AccessDeniedException {
         Events existing = eventRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("event not found: "  +id));
-
-        // Check ownership
+    
         Users owner = existing.getCreatedBy();
 
         if(owner == null || username == null || !username.equals(owner.getUsername())) {
@@ -78,8 +77,19 @@ public class EventService {
         existing.setTitle(updated.getTitle());
         existing.setStartTime(updated.getStartTime());
         existing.setEndTime(updated.getEndTime());
-        // existing.setCalendarId(updated.getCalendarId());
         existing.setCompleted(updated.getCompleted());
+
+        // If the calendar is not null in the updated event, update the calendar. If not, set null
+        if(updated.getCalendar() != null) {
+            Integer newCalId = updated.getCalendar().getId();
+
+            if(newCalId != null) {
+                Calendars cal = calRepo.findById(newCalId).orElseThrow(() -> new IllegalArgumentException());
+                existing.setCalendar(cal);
+            } else {
+                existing.setCalendar(null);
+            }
+        }
 
         eventRepo.save(existing);
     }
