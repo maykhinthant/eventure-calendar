@@ -2,11 +2,14 @@ package com.eventure.calendar_app.service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.eventure.calendar_app.model.Calendars;
 import com.eventure.calendar_app.model.Events;
 import com.eventure.calendar_app.model.Users;
+import com.eventure.calendar_app.repo.CalendarRepo;
 import com.eventure.calendar_app.repo.EventRepo;
 import com.eventure.calendar_app.repo.UserRepo;
 
@@ -15,17 +18,19 @@ public class EventService {
 
     private EventRepo eventRepo;
     private UserRepo userRepo;
+    private CalendarRepo calRepo;
 
     // Constructor injection
-    public EventService(EventRepo eventRepo, UserRepo userRepo) {
+    public EventService(EventRepo eventRepo, UserRepo userRepo, CalendarRepo calRepo) {
         this.eventRepo = eventRepo;
         this.userRepo = userRepo;
+        this.calRepo = calRepo;
     }
 
-    // ---------- CREATE NEW EVENT ----------
-    // Find the users object using the username
-    // Set the createdBy for the event and save the event
+    // Create new event
     public void createEvent(Events event, String username) {
+
+        // Find the user object and set createdBy
         Users user = userRepo.findByUsername(username);
 
         if(user == null) {
@@ -33,6 +38,19 @@ public class EventService {
         }
 
         event.setCreatedBy(user);
+
+        // If client provides calendar, set the calendar in the events. If not, set calendar to null
+        if(event.getCalendar() != null) {
+            Integer calId = event.getCalendar().getId();
+
+            if(calId != null) {
+                Calendars calendar = calRepo.findById(calId).orElseThrow(() -> new IllegalArgumentException("calendar not found: " + calId));
+                event.setCalendar(calendar);
+            } else {
+                event.setCalendar(null);
+            }
+        }
+        
         eventRepo.save(event);
     }
 

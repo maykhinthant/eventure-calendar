@@ -34,8 +34,8 @@ public class Events {
     @JsonIgnoreProperties({"password", "hibernateLazyInitializer", "handler"})
     private Users createdBy;
 
-    // @ManyToOne(fetch = FetchType.LAZY) 
-    // @JoinColumn(name = "calendar_id", nullable = true)
-    // @JsonIgnoreProperties({"owner", "hibernateLazyInitializer", "handler"})
-    // private Calendars calendar;
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "calendar_id", nullable = true)
+    @JsonIgnoreProperties({"owner", "hibernateLazyInitializer", "handler"})
+    private Calendars calendar;
 }
