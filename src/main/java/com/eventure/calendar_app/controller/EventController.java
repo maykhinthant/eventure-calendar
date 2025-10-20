@@ -10,6 +10,8 @@ import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,29 +35,59 @@ public class EventController {
     // Create new event after log in
     // Use Principal to fetch the username of the logged in user
     @PostMapping("/events")
-    public void createEvent(@RequestBody Events event, Principal principal) {
-        String username = principal != null ? principal.getName() : null;
-        service.createEvent(event, username);
+    public ResponseEntity<?> createEvent(@RequestBody Events event, Principal principal) {
+        try {
+            String username = principal != null ? principal.getName() : null;
+            service.createEvent(event, username);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     // Fetch all the events for the logged in user
     @GetMapping("/events")
-    public List<Events> getEvents(Principal principal) {
-        String username = principal != null ? principal.getName() : null;
-        return service.getEvents(username);
+    public ResponseEntity<?> getEvents(Principal principal) {
+        try {
+            String username = principal != null ? principal.getName() : null;
+            List<Events> events = service.getEvents(username);
+            return ResponseEntity.ok(events);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     // Update an existing event
     @PutMapping("/events/{id}")
-    public void updateEvent(@PathVariable Integer id, @RequestBody Events event, Principal principal) throws AccessDeniedException {
-        String username = principal != null ? principal.getName() : null;
-        service.updateEvent(id, event, username);
+    public ResponseEntity<?> updateEvent(@PathVariable Integer id, @RequestBody Events event, Principal principal) {
+        try {
+            String username = principal != null ? principal.getName() : null;
+            service.updateEvent(id, event, username);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (AccessDeniedException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     // Delete the event by the id
     @DeleteMapping("/events/{id}")
-    public void deleteEvent(@PathVariable Integer id, Principal principal) throws AccessDeniedException {
-        String username = principal != null ? principal.getName() : null;
-        service.deleteEvent(id, username);
+    public ResponseEntity<?> deleteEvent(@PathVariable Integer id, Principal principal) {
+        try {
+            String username = principal != null ? principal.getName() : null;
+            service.deleteEvent(id, username);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (AccessDeniedException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 }
