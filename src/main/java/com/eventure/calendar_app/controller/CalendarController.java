@@ -4,6 +4,7 @@ import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.eventure.calendar_app.model.Calendars;
 import com.eventure.calendar_app.service.CalendarService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class CalendarController {
     
