@@ -1,5 +1,6 @@
 package com.eventure.calendar_app.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,17 @@ public class Users {
     
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private Integer id;
+	private Long id;
+
+	@Column(unique = true)
 	private String username;
-	private String password;
+
+	@Column(unique = true)
+	private String email;
+
+	private String name;
+	private String password;	// not used for oauth but keep for local login flows
+	private String provider;	// e.g. "google", "github"
+	private String providerId;	// provider's user id
+	private String roles; // comma separated roles "ROLE_USER,ROLE_ADMIN"
 }

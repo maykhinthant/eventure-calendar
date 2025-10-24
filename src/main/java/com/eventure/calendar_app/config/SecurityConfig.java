@@ -18,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.eventure.calendar_app.service.CustomOAuth2UserService;
+
 import java.util.Arrays;
 
 @Configuration
@@ -34,6 +37,12 @@ public class SecurityConfig {
 
 	@Autowired
 	private jwtFilter jwtFilter;
+
+	@Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    private OAuth2LoginSuccessHandler oauth2LoginSuccessHandler;
 	
 	@Bean
 	public AuthenticationProvider authProvider() {
@@ -53,11 +62,14 @@ public class SecurityConfig {
 					.csrf(customizer -> customizer.disable())
 					.cors(Customizer.withDefaults())
 					.authorizeHttpRequests(request -> request
-							.requestMatchers("/api/users/register", "/api/users/login")	// Don't authorize the register and login page
-							.permitAll()							// But permit authorization for any other requests
+							.requestMatchers("/api/users/register", "/api/users/login", "/oauth2/**", "/login/oauth2/**")	// Don't authorize the register and login page
+							.permitAll()								// But permit authorization for any other requests
 							.anyRequest().authenticated())
 					.httpBasic(Customizer.withDefaults())
-					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+					.oauth2Login(oauth2 -> oauth2
+						.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))  // set custom user service to map/save user to DB
+						.successHandler(oauth2LoginSuccessHandler))    		// set custom success handler to create JWT and redirect to frontend
+					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
 					// when we use Jwt, we have 2 filters in the chain (jwtfilter, UsernamePasswordAuthenticationfilter)
 					// We are saying "hey use jwtfilter before UsernamePasswordAuthenticationfilter"
