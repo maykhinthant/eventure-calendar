@@ -69,7 +69,7 @@ public class SecurityConfig {
 					.oauth2Login(oauth2 -> oauth2
 						.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))  // set custom user service to map/save user to DB
 						.successHandler(oauth2LoginSuccessHandler))    		// set custom success handler to create JWT and redirect to frontend
-					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 					// when we use Jwt, we have 2 filters in the chain (jwtfilter, UsernamePasswordAuthenticationfilter)
 					// We are saying "hey use jwtfilter before UsernamePasswordAuthenticationfilter"

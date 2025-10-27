@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,4 +39,14 @@ public class Events {
     @JoinColumn(name = "calendar_id", nullable = true)
     @JsonIgnoreProperties({"owner", "hibernateLazyInitializer", "handler"})
     private Calendars calendar;
+
+    // Quick boolean to know if the event repeats at all.
+    private Boolean isRecurring;
+
+    // iCalendar RRULE string
+    @Column(columnDefinition = "TEXT")
+    private String recurrenceRule;
+    
+    // End date for recurring events
+    private LocalDateTime recurrenceEndDate;
 }
