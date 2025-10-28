@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,11 +26,14 @@ import com.eventure.calendar_app.user.repo.UserRepo;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private JWTService jwtService;
+    private final JWTService jwtService;
+
+    public CustomOAuth2UserService(UserRepo userRepo, JWTService jwtService) {
+        this.userRepo = userRepo;
+        this.jwtService = jwtService;
+    }
 
     /**
      * loadUser:
@@ -41,7 +43,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         // Fetch attributes from provider (default behavior)
-        OAuth2User oauth2User = super.loadUser(userRequest);
+        OAuth2User oauth2User = fetchOAuth2User(userRequest);
 
         // provider id: "google", "github", etc.
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -113,6 +115,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         mappedAttributes.put("email", user.getEmail());
 
         return new DefaultOAuth2User(Collections.singleton(authority), mappedAttributes, "email");
+    }
+
+    protected OAuth2User fetchOAuth2User(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        return super.loadUser(userRequest);
     }
 
     // Helper to find an email in provider-specific attributes
