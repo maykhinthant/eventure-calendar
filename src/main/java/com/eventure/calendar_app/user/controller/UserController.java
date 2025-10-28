@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.controller;
+package com.eventure.calendar_app.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eventure.calendar_app.model.Users;
-import com.eventure.calendar_app.service.UserService;
+import com.eventure.calendar_app.user.model.Users;
+import com.eventure.calendar_app.user.service.UserService;
 
 @RestController
 @CrossOrigin

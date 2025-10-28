@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.service;
+package com.eventure.calendar_app.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,8 +7,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.eventure.calendar_app.model.Users;
-import com.eventure.calendar_app.repo.UserRepo;
+import com.eventure.calendar_app.auth.service.JWTService;
+import com.eventure.calendar_app.user.model.Users;
+import com.eventure.calendar_app.user.repo.UserRepo;
 
 @Service 
 public class UserService {

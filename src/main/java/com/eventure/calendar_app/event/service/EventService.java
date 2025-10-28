@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.service;
+package com.eventure.calendar_app.event.service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.ZoneId;
@@ -8,12 +8,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.eventure.calendar_app.model.Calendars;
-import com.eventure.calendar_app.model.Events;
-import com.eventure.calendar_app.model.Users;
-import com.eventure.calendar_app.repo.CalendarRepo;
-import com.eventure.calendar_app.repo.EventRepo;
-import com.eventure.calendar_app.repo.UserRepo;
+import com.eventure.calendar_app.calendar.model.Calendars;
+import com.eventure.calendar_app.calendar.repo.CalendarRepo;
+import com.eventure.calendar_app.event.model.Events;
+import com.eventure.calendar_app.event.repo.EventRepo;
+import com.eventure.calendar_app.user.model.Users;
+import com.eventure.calendar_app.user.repo.UserRepo;
 
 import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.Period;

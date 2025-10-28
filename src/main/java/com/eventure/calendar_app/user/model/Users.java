@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.model;
+package com.eventure.calendar_app.user.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

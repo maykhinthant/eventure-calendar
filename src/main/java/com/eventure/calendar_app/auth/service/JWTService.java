@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.service;
+package com.eventure.calendar_app.auth.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;

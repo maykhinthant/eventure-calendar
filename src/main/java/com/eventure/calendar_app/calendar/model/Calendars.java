@@ -1,5 +1,6 @@
-package com.eventure.calendar_app.model;
+package com.eventure.calendar_app.calendar.model;
 
+import com.eventure.calendar_app.user.model.Users;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.controller;
+package com.eventure.calendar_app;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

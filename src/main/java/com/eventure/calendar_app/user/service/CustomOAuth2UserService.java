@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.service;
+package com.eventure.calendar_app.user.service;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,8 +13,9 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.eventure.calendar_app.model.Users;
-import com.eventure.calendar_app.repo.UserRepo;
+import com.eventure.calendar_app.auth.service.JWTService;
+import com.eventure.calendar_app.user.model.Users;
+import com.eventure.calendar_app.user.repo.UserRepo;
 
 /**
  * CustomOAuth2UserService

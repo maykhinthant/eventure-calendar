@@ -1,4 +1,4 @@
-package com.eventure.calendar_app.model;
+package com.eventure.calendar_app.user.model;
 
 import java.util.Collection;
 import java.util.Collections;

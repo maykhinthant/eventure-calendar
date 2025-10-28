@@ -1,9 +1,9 @@
-package com.eventure.calendar_app.repo;
+package com.eventure.calendar_app.event.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.eventure.calendar_app.model.Events;
+import com.eventure.calendar_app.event.model.Events;
 
 import java.util.List;
 

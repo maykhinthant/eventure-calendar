@@ -1,14 +1,14 @@
-package com.eventure.calendar_app.service;
+package com.eventure.calendar_app.calendar.service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.eventure.calendar_app.model.Calendars;
-import com.eventure.calendar_app.model.Users;
-import com.eventure.calendar_app.repo.CalendarRepo;
-import com.eventure.calendar_app.repo.UserRepo;
+import com.eventure.calendar_app.calendar.model.Calendars;
+import com.eventure.calendar_app.calendar.repo.CalendarRepo;
+import com.eventure.calendar_app.user.model.Users;
+import com.eventure.calendar_app.user.repo.UserRepo;
 
 @Service
 public class CalendarService {

@@ -1,4 +1,10 @@
-package com.eventure.calendar_app.controller;
+package com.eventure.calendar_app.event.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.eventure.calendar_app.event.model.Events;
+import com.eventure.calendar_app.event.service.EventService;
 
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
@@ -6,36 +12,33 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.eventure.calendar_app.model.Calendars;
-import com.eventure.calendar_app.service.CalendarService;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-public class CalendarController {
+public class EventController {
     
-    private CalendarService service;
+    private EventService service;
 
-    public CalendarController (CalendarService service) {
+    // Constructor injection
+    public EventController(EventService service) {
         this.service = service;
     }
-
-    // Create new calendar for the logged in user
-    @PostMapping("/calendars")
-    public ResponseEntity<?> createCalendar(@RequestBody Calendars calendar, Principal principal) {
+    
+    // Create new event after log in
+    // Use Principal to fetch the username of the logged in user
+    @PostMapping("/events")
+    public ResponseEntity<?> createEvent(@RequestBody Events event, Principal principal) {
         try {
             String username = principal != null ? principal.getName() : null;
-            service.createCalendar(calendar, username);
+            service.createEvent(event, username);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -44,24 +47,24 @@ public class CalendarController {
         }
     }
 
-    // Fetch all the calendars
-    @GetMapping("/calendars")
-    public ResponseEntity<?> getAllCalendars(Principal principal) {
+    // Fetch all the events for the logged in user
+    @GetMapping("/events")
+    public ResponseEntity<?> getEvents(Principal principal) {
         try {
             String username = principal != null ? principal.getName() : null;
-            List<Calendars> calendars = service.getAllCalendars(username);
-            return ResponseEntity.ok(calendars);
+            List<Events> events = service.getEvents(username);
+            return ResponseEntity.ok(events);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 
-    // Update an existing calendar
-    @PutMapping("/calendars/{id}")
-    public ResponseEntity<?> updateCalendar(@PathVariable Integer id, @RequestBody Calendars updated, Principal principal) {
+    // Update an existing event
+    @PutMapping("/events/{id}")
+    public ResponseEntity<?> updateEvent(@PathVariable Integer id, @RequestBody Events event, Principal principal) {
         try {
             String username = principal != null ? principal.getName() : null;
-            service.updateCalendar(id, updated, username);
+            service.updateEvent(id, event, username);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -72,12 +75,12 @@ public class CalendarController {
         }
     }
 
-    // Delete a calendar
-    @DeleteMapping("/calendars/{id}")
-    public ResponseEntity<?> deleteCalendar(@PathVariable Integer id, Principal principal) {
+    // Delete the event by the id
+    @DeleteMapping("/events/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Integer id, Principal principal) {
         try {
             String username = principal != null ? principal.getName() : null;
-            service.deleteCalendar(id, username);
+            service.deleteEvent(id, username);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

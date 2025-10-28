@@ -1,7 +1,9 @@
-package com.eventure.calendar_app.model;
+package com.eventure.calendar_app.event.model;
 
 import java.time.LocalDateTime;
 
+import com.eventure.calendar_app.calendar.model.Calendars;
+import com.eventure.calendar_app.user.model.Users;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;

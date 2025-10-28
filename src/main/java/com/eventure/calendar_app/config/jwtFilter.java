@@ -11,8 +11,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.eventure.calendar_app.service.JWTService;
-import com.eventure.calendar_app.service.MyUserDetailsService;
+import com.eventure.calendar_app.auth.service.JWTService;
+import com.eventure.calendar_app.user.service.MyUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

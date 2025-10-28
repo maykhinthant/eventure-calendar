@@ -19,7 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.eventure.calendar_app.service.CustomOAuth2UserService;
+import com.eventure.calendar_app.user.service.CustomOAuth2UserService;
 
 import java.util.Arrays;
 
