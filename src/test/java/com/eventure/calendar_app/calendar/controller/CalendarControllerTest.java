@@ -1,9 +1,9 @@
 package com.eventure.calendar_app.calendar.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,11 +31,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.eventure.calendar_app.calendar.model.Calendars;
 import com.eventure.calendar_app.calendar.service.CalendarService;
 import com.eventure.calendar_app.config.jwtFilter;
+import com.eventure.testconfig.TestSecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(value = CalendarController.class, 
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = jwtFilter.class))
-@Import(CalendarControllerTest.TestSecurityConfig.class)
+@Import(TestSecurityConfig.class)
 public class CalendarControllerTest {
 
     @Autowired
@@ -235,11 +236,5 @@ public class CalendarControllerTest {
                 .principal(mockPrincipal))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Unexpected error"));
-    }
-    
-    // Test configuration to disable security
-    @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = org.springframework.security.config.annotation.web.configuration.EnableWebSecurity.class))
-    static class TestSecurityConfig {
-        // This configuration class excludes EnableWebSecurity to disable security
     }
 }
