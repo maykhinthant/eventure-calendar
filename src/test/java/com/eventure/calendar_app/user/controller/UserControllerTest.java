@@ -10,75 +10,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.eventure.calendar_app.config.jwtFilter;
 import com.eventure.calendar_app.user.model.Users;
 import com.eventure.calendar_app.user.service.UserService;
+import com.eventure.testconfig.TestSecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(value = UserController.class, 
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = jwtFilter.class))
+@Import(TestSecurityConfig.class)
 class UserControllerTest {
 
-    @Mock
-    private UserService userService;
-
-    @InjectMocks
-    private UserController userController;
-
+    @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private UserService userService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        objectMapper = new ObjectMapper();
     }
 
     @Test
-    void login_WhenServiceReturnsToken_ShouldRespondWithToken() throws Exception {
-        Users requestUser = new Users();
-        requestUser.setUsername("jane.doe");
-        requestUser.setPassword("super-secret");
-
-        when(userService.verify(any(Users.class))).thenReturn("jwt-token");
-
-        mockMvc.perform(post("/api/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestUser)))
-            .andExpect(status().isOk())
-            .andExpect(content().string("jwt-token"));
-
-        verify(userService).verify(argThat(user ->
-                "jane.doe".equals(user.getUsername()) && "super-secret".equals(user.getPassword())));
-    }
-
-    @Test
-    void login_WhenServiceReturnsFail_ShouldRespondWithFail() throws Exception {
-        Users requestUser = new Users();
-        requestUser.setUsername("john.doe");
-        requestUser.setPassword("bad-password");
-
-        when(userService.verify(any(Users.class))).thenReturn("fail");
-
-        mockMvc.perform(post("/api/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestUser)))
-            .andExpect(status().isOk())
-            .andExpect(content().string("fail"));
-
-        verify(userService).verify(argThat(user ->
-                "john.doe".equals(user.getUsername()) && "bad-password".equals(user.getPassword())));
-    }
-
-    @Test
-    void register_ShouldDelegateToServiceAndReturnPersistedUser() throws Exception {
+    void register_WhenValidUserProvided_ShouldReturnPersistedUser() throws Exception {
+        // Arrange
         Users requestUser = new Users();
         requestUser.setUsername("alice");
         requestUser.setPassword("password123");
@@ -88,12 +55,13 @@ class UserControllerTest {
         Users persistedUser = new Users();
         persistedUser.setId(1L);
         persistedUser.setUsername("alice");
-        persistedUser.setPassword("password123");
+        persistedUser.setPassword("encodedPassword");
         persistedUser.setEmail("alice@example.com");
         persistedUser.setName("Alice Wonderland");
 
         when(userService.register(any(Users.class))).thenReturn(persistedUser);
 
+        // Act & Assert
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestUser)))
@@ -105,5 +73,45 @@ class UserControllerTest {
                 "password123".equals(user.getPassword()) &&
                 "alice@example.com".equals(user.getEmail()) &&
                 "Alice Wonderland".equals(user.getName())));
+    }
+
+    @Test
+    void login_WhenValidCredentialsProvided_ShouldReturnJwtToken() throws Exception {
+        // Arrange
+        Users requestUser = new Users();
+        requestUser.setUsername("jane.doe");
+        requestUser.setPassword("super-secret");
+
+        when(userService.verify(any(Users.class))).thenReturn("jwt-token");
+
+        // Act & Assert
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestUser)))
+            .andExpect(status().isOk())
+            .andExpect(content().string("jwt-token"));
+
+        verify(userService).verify(argThat(user ->
+                "jane.doe".equals(user.getUsername()) && "super-secret".equals(user.getPassword())));
+    }
+
+    @Test
+    void login_WhenInvalidCredentialsProvided_ShouldReturnFail() throws Exception {
+        // Arrange
+        Users requestUser = new Users();
+        requestUser.setUsername("john.doe");
+        requestUser.setPassword("bad-password");
+
+        when(userService.verify(any(Users.class))).thenReturn("fail");
+
+        // Act & Assert
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestUser)))
+            .andExpect(status().isOk())
+            .andExpect(content().string("fail"));
+
+        verify(userService).verify(argThat(user ->
+                "john.doe".equals(user.getUsername()) && "bad-password".equals(user.getPassword())));
     }
 }
