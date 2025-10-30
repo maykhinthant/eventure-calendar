@@ -20,9 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.eventure.calendar_app.config.jwtFilter;
+import com.eventure.calendar_app.testconfig.TestSecurityConfig;
 import com.eventure.calendar_app.user.model.Users;
 import com.eventure.calendar_app.user.service.UserService;
-import com.eventure.testconfig.TestSecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(value = UserController.class, 

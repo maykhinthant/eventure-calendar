@@ -1,4 +1,4 @@
-package com.eventure.testconfig;
+package com.eventure.calendar_app.testconfig;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

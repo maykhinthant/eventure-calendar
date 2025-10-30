@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.eventure.calendar_app.calendar.model.Calendars;
 import com.eventure.calendar_app.calendar.service.CalendarService;
 import com.eventure.calendar_app.config.jwtFilter;
-import com.eventure.testconfig.TestSecurityConfig;
+import com.eventure.calendar_app.testconfig.TestSecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(value = CalendarController.class, 
